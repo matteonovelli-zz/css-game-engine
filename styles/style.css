@@ -18,8 +18,7 @@ body {
 .p {
   background-color: red;
   position: absolute;
-  left: calc(2vh + 1px);
-  top: calc(2vh + 1px);
+  display: none;
   width: calc(2vh - 2px);
   height: calc(2vh - 2px);
 }
