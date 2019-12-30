@@ -1,0 +1,29 @@
+body {
+  margin: 0;
+  overflow: hidden;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(10, 2vh);
+  grid-template-rows: repeat(10, 2vh);
+  overflow: hidden;
+  position: absolute;
+}
+
+.e {
+  border: 1px solid rgba(0, 0, 0, 1);
+}
+
+.p {
+  background-color: red;
+  position: absolute;
+  left: calc(2vh + 1px);
+  top: calc(2vh + 1px);
+  width: calc(2vh - 2px);
+  height: calc(2vh - 2px);
+}
+
+.w {
+  background-color: black;
+}
