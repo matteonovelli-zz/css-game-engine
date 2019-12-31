@@ -12,14 +12,13 @@ class Player extends GameObject {
     this.direction = DIRECTION.RIGHT;
     this.speed = 3;
     document.onkeydown = (key) => {
-      if ([DIRECTION.UP, DIRECTION.RIGHT, DIRECTION.DOWN, DIRECTION.LEFT].includes(key.keyCode)) {
-        this.direction = key.keyCode;
-      }
+      if (![DIRECTION.UP, DIRECTION.RIGHT, DIRECTION.DOWN, DIRECTION.LEFT].includes(key.keyCode)) { return; }
+      this.direction = key.keyCode;
     };
   }
 
-  update () {
-    const position = this.speed * (this.deltatime / 1000);
+  update (deltatime) {
+    const position = this.speed * (deltatime / 1000);
     switch (this.direction) {
       case DIRECTION.UP:
         this.position.y -= position;

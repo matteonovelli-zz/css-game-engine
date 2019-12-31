@@ -7,12 +7,12 @@ class GameObject {
       const now = performance.now();
       this.deltatime = now - this.lastUpdate;
       this.lastUpdate = now;
-      this.update();
+      this.update(this.deltatime);
       this.render();
     }, 0);
   }
 
-  update () {}
+  update (deltatime) {}
 
   render () {}
 }
