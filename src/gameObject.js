@@ -1,16 +1,18 @@
 class GameObject {
-  constructor () {
+  constructor (elementId) {
+    this.elementRef = document.getElementById(elementId);
     this.lastUpdate = performance.now();
+    this.deltatime = 0;
     setInterval(() => {
       const now = performance.now();
-      const deltatime = now - this.lastUpdate;
+      this.deltatime = now - this.lastUpdate;
       this.lastUpdate = now;
-      this.update(deltatime);
+      this.update();
       this.render();
     }, 0);
   }
 
-  update (deltatime) {}
+  update () {}
 
   render () {}
 }
