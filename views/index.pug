@@ -5,11 +5,10 @@
   </head>
   <body>
     <div id="game-canvas" class="grid">
-      for row in level1
-        for item in row
-          div(class=item)
+      for row, x in level1
+        for item, y in row
+          div(class=item id=item + '_' + x + '_' + y)
     </div>
-    <div class="p" id="player"></div>
     <script src="dist/bundle.js"></script>
   </body>
 </html>

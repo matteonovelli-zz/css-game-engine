@@ -1,4 +1,5 @@
 import { Player } from '../src/player';
+import { Obstacle } from '../src/obstacle';
 import { DIRECTION } from '../src/constants';
 
 describe('When game starts', () => {
@@ -12,10 +13,10 @@ describe('When game starts', () => {
     expect(sut.speed).toBe(3);
   });
 
-  test('player\'s positions must be (0,0)', () => {
+  test('player\'s positions must be (1, 1)', () => {
     const sut = new Player('palyer');
-    expect(sut.position.x).toBe(0);
-    expect(sut.position.y).toBe(0);
+    expect(sut.position.x).toBe(1);
+    expect(sut.position.y).toBe(1);
   });
 });
 
@@ -51,23 +52,23 @@ describe('After one second update', () => {
 
     sut.direction = DIRECTION.RIGHT;
     sut.update(1000);
-    expect(sut.position.y).toBe(0);
-    expect(sut.position.x).toBe(1);
+    expect(sut.position.y).toBe(1);
+    expect(sut.position.x).toBe(2);
 
     sut.direction = DIRECTION.DOWN;
     sut.update(1000);
-    expect(sut.position.y).toBe(1);
-    expect(sut.position.x).toBe(1);
+    expect(sut.position.y).toBe(2);
+    expect(sut.position.x).toBe(2);
 
     sut.direction = DIRECTION.LEFT;
     sut.update(1000);
-    expect(sut.position.y).toBe(1);
-    expect(sut.position.x).toBe(0);
+    expect(sut.position.y).toBe(2);
+    expect(sut.position.x).toBe(1);
 
     sut.direction = DIRECTION.UP;
     sut.update(1000);
-    expect(sut.position.y).toBe(0);
-    expect(sut.position.x).toBe(0);
+    expect(sut.position.y).toBe(1);
+    expect(sut.position.x).toBe(1);
   });
 });
 
@@ -94,5 +95,41 @@ describe('After render', () => {
     expect(sut.elementRef.style.left).toBe('calc(2vh + 1px)');
     expect(sut.elementRef.style.top).toBe('calc(2vh + 1px)');
     expect(sut.elementRef.style.display).toBe('block');
+  });
+});
+
+test('If not collide on next frame emit end game event must not be called', () => {
+  const sut = new Player('player');
+  sut.obstacles = [new Obstacle('1', 1, 0)];
+  sut.speed = 1;
+  sut.direction = DIRECTION.DOWN;
+
+  sut.notifyCollision = jest.fn();
+  sut.update(1000);
+  expect(sut.notifyCollision).not.toBeCalled();
+});
+
+test('If collide on next frame must emit end game event', () => {
+  const sut = new Player('player');
+  sut.obstacles = [new Obstacle('1', 2, 1)];
+  sut.speed = 1;
+  sut.direction = DIRECTION.RIGHT;
+
+  sut.notifyCollision = jest.fn();
+  expect(sut.notifyCollision).not.toBeCalled();
+  sut.update(1000);
+  expect(sut.notifyCollision).toBeCalled();
+});
+
+test('Notify collision to all observers', () => {
+  const sut = new Player('player');
+  sut.collisionObservers = [jest.fn(), jest.fn()];
+
+  sut.collisionObservers.forEach((observer) => {
+    expect(observer).not.toBeCalled();
+  });
+  sut.notifyCollision();
+  sut.collisionObservers.forEach((observer) => {
+    expect(observer).toBeCalled();
   });
 });

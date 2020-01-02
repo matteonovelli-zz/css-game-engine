@@ -1,8 +1,13 @@
 import { GameObject } from '../src/gameObject';
 
-jest.useFakeTimers();
+test('Render function must exists', () => {
+  const sut = new GameObject('sut');
+  const render = sut.render();
+  expect(render).toBeUndefined();
+});
 
-test('Time interval must be called', () => {
-  GameObject('sut');
-  expect(setInterval).toHaveBeenCalledTimes(1);
+test('Update function must exists', () => {
+  const sut = new GameObject('sut');
+  const update = sut.update();
+  expect(update).toBeUndefined();
 });

@@ -81,23 +81,124 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./src/game.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/index.js");
 /******/ })
 /************************************************************************/
 /******/ ({
+
+/***/ "./data/data.json":
+/*!************************!*\
+  !*** ./data/data.json ***!
+  \************************/
+/*! exports provided: level1, default */
+/***/ (function(module) {
+
+module.exports = JSON.parse("{\"level1\":[[\"w\",\"w\",\"w\",\"w\",\"w\",\"w\",\"w\",\"w\",\"w\",\"w\"],[\"w\",\"e\",\"e\",\"e\",\"e\",\"e\",\"e\",\"e\",\"e\",\"w\"],[\"w\",\"e\",\"e\",\"e\",\"e\",\"e\",\"e\",\"e\",\"e\",\"w\"],[\"w\",\"e\",\"e\",\"e\",\"e\",\"e\",\"e\",\"e\",\"e\",\"w\"],[\"w\",\"e\",\"e\",\"e\",\"e\",\"e\",\"e\",\"e\",\"e\",\"w\"],[\"w\",\"e\",\"e\",\"e\",\"e\",\"e\",\"e\",\"e\",\"e\",\"w\"],[\"w\",\"e\",\"e\",\"e\",\"e\",\"e\",\"e\",\"e\",\"e\",\"w\"],[\"w\",\"e\",\"e\",\"e\",\"e\",\"e\",\"e\",\"e\",\"e\",\"w\"],[\"w\",\"e\",\"e\",\"e\",\"e\",\"e\",\"e\",\"e\",\"e\",\"w\"],[\"w\",\"w\",\"w\",\"w\",\"w\",\"w\",\"w\",\"w\",\"w\",\"w\"],[\"p\"]]}");
+
+/***/ }),
+
+/***/ "./src/constants.js":
+/*!**************************!*\
+  !*** ./src/constants.js ***!
+  \**************************/
+/*! exports provided: DIRECTION */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DIRECTION", function() { return DIRECTION; });
+const DIRECTION = {
+  LEFT: 37,
+  UP: 38,
+  RIGHT: 39,
+  DOWN: 40
+};
+
+
+/***/ }),
 
 /***/ "./src/game.js":
 /*!*********************!*\
   !*** ./src/game.js ***!
   \*********************/
-/*! no exports provided */
+/*! exports provided: Game */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Game", function() { return Game; });
 /* harmony import */ var _player__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./player */ "./src/player.js");
+/* harmony import */ var _obstacle__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./obstacle */ "./src/obstacle.js");
 
-const player = new _player__WEBPACK_IMPORTED_MODULE_0__["Player"]('player');
+
+
+class Game {
+  constructor(levels) {
+    this.lastUpdate = performance.now();
+    this.deltatime = 0;
+    this.gameObjects = [];
+    this.runGame = true;
+    this.init(levels);
+    this.update();
+  }
+
+  init(levels) {
+    const obstacles = [];
+    let player;
+    levels.level1.forEach((row, x) => {
+      row.forEach((item, y) => {
+        switch (item) {
+          case 'w':
+            obstacles.push(new _obstacle__WEBPACK_IMPORTED_MODULE_1__["Obstacle"](`${item}_${x}_${y}`, x, y));
+            break;
+
+          case 'p':
+            player = new _player__WEBPACK_IMPORTED_MODULE_0__["Player"](`${item}_${x}_${y}`);
+            player.collisionObservers.push(this);
+            break;
+
+          default:
+            break;
+        }
+      });
+    });
+    player.obstacles = obstacles;
+    this.gameObjects = [].concat(player).concat(obstacles);
+  }
+
+  update() {
+    const now = performance.now();
+    this.deltatime = now - this.lastUpdate;
+    this.lastUpdate = now;
+    this.gameObjects.forEach(gameObject => {
+      gameObject.deltatime = this.deltatime;
+      gameObject.update(this.deltatime);
+    });
+    setTimeout(() => {
+      this.render();
+    }, 0);
+  }
+
+  render() {
+    if (this.runGame) {
+      this.gameObjects.forEach(gameObject => {
+        gameObject.render();
+      });
+      this.update();
+    } else {
+      console.log('REMOVE GAME CANVAS');
+      document.getElementById('game-canvas').remove();
+    }
+  }
+
+  endGameEvent() {
+    console.log('FIN');
+    this.runGame = false;
+  }
+
+}
+
+
 
 /***/ }),
 
@@ -112,20 +213,60 @@ const player = new _player__WEBPACK_IMPORTED_MODULE_0__["Player"]('player');
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GameObject", function() { return GameObject; });
 class GameObject {
-  constructor() {
-    this.lastUpdate = performance.now();
-    setInterval(() => {
-      const now = performance.now();
-      const deltatime = now - this.lastUpdate;
-      this.lastUpdate = now;
-      this.update(deltatime);
-      this.render();
-    }, 0);
+  constructor(elementId) {
+    this.elementRef = document.getElementById(elementId);
   }
 
   update(deltatime) {}
 
   render() {}
+
+}
+
+
+
+/***/ }),
+
+/***/ "./src/index.js":
+/*!**********************!*\
+  !*** ./src/index.js ***!
+  \**********************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _data_data_json__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../data/data.json */ "./data/data.json");
+var _data_data_json__WEBPACK_IMPORTED_MODULE_0___namespace = /*#__PURE__*/__webpack_require__.t(/*! ../data/data.json */ "./data/data.json", 1);
+/* harmony import */ var _game__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./game */ "./src/game.js");
+
+ // eslint-disable-next-line no-unused-vars
+
+const game = new _game__WEBPACK_IMPORTED_MODULE_1__["Game"](_data_data_json__WEBPACK_IMPORTED_MODULE_0__);
+
+/***/ }),
+
+/***/ "./src/obstacle.js":
+/*!*************************!*\
+  !*** ./src/obstacle.js ***!
+  \*************************/
+/*! exports provided: Obstacle */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Obstacle", function() { return Obstacle; });
+/* harmony import */ var _gameObject__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./gameObject */ "./src/gameObject.js");
+
+
+class Obstacle extends _gameObject__WEBPACK_IMPORTED_MODULE_0__["GameObject"] {
+  constructor(elementId, x, y) {
+    super(elementId);
+    this.position = {
+      x,
+      y
+    };
+  }
 
 }
 
@@ -144,54 +285,64 @@ class GameObject {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Player", function() { return Player; });
 /* harmony import */ var _gameObject__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./gameObject */ "./src/gameObject.js");
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./constants */ "./src/constants.js");
+
 
 
 class Player extends _gameObject__WEBPACK_IMPORTED_MODULE_0__["GameObject"] {
   constructor(elementId) {
-    super();
-    this.init(elementId);
+    super(elementId);
+    this.init();
   }
 
-  init(elementId) {
+  init() {
     this.position = {
-      x: 0,
-      y: 0
+      x: 1,
+      y: 1
     };
-    this.direction = 39;
+    this.direction = _constants__WEBPACK_IMPORTED_MODULE_1__["DIRECTION"].RIGHT;
     this.speed = 3;
-    this.elementRef = document.getElementById(elementId);
-    this.elementRef.style.display = 'block';
+    this.obstacles = [];
+    this.collisionObservers = [];
 
-    document.onkeydown = key => {
-      if (key.keyCode >= 37 && key.keyCode <= 40) {
-        this.direction = key.keyCode;
-      }
-    };
+    document.onkeydown = key => this.processInputs(key);
+  }
+
+  processInputs(key) {
+    if (![_constants__WEBPACK_IMPORTED_MODULE_1__["DIRECTION"].UP, _constants__WEBPACK_IMPORTED_MODULE_1__["DIRECTION"].RIGHT, _constants__WEBPACK_IMPORTED_MODULE_1__["DIRECTION"].DOWN, _constants__WEBPACK_IMPORTED_MODULE_1__["DIRECTION"].LEFT].includes(key.keyCode)) {
+      return;
+    }
+
+    this.direction = key.keyCode;
   }
 
   update(deltatime) {
     const position = this.speed * (deltatime / 1000);
+    const nextPosition = { ...this.position
+    };
 
     switch (this.direction) {
-      case 38:
-        // UP
-        this.position.y -= position;
+      case _constants__WEBPACK_IMPORTED_MODULE_1__["DIRECTION"].UP:
+        nextPosition.y -= position;
         break;
 
-      case 39:
-        // RIGHT
-        this.position.x += position;
+      case _constants__WEBPACK_IMPORTED_MODULE_1__["DIRECTION"].RIGHT:
+        nextPosition.x += position;
         break;
 
-      case 40:
-        // DOWN
-        this.position.y += position;
+      case _constants__WEBPACK_IMPORTED_MODULE_1__["DIRECTION"].DOWN:
+        nextPosition.y += position;
         break;
 
-      case 37:
-        // LEFT
-        this.position.x -= position;
+      case _constants__WEBPACK_IMPORTED_MODULE_1__["DIRECTION"].LEFT:
+        nextPosition.x -= position;
         break;
+    }
+
+    if (!this.detectCollisions(nextPosition)) {
+      this.position = nextPosition;
+    } else {
+      this.notifyCollision();
     }
   }
 
@@ -200,8 +351,22 @@ class Player extends _gameObject__WEBPACK_IMPORTED_MODULE_0__["GameObject"] {
       return;
     }
 
-    this.elementRef.style.left = `calc(${Math.trunc(this.position.x) * 2 + 2}vh + 1px)`;
-    this.elementRef.style.top = `calc(${Math.trunc(this.position.y) * 2 + 2}vh + 1px)`;
+    this.elementRef.style.display = 'block';
+    this.elementRef.style.left = `calc(${Math.trunc(this.position.x) * 2}vh + 1px)`;
+    this.elementRef.style.top = `calc(${Math.trunc(this.position.y) * 2}vh + 1px)`;
+  }
+
+  detectCollisions(nextPosition) {
+    return this.obstacles.some(obstacle => {
+      return obstacle.position.x === Math.trunc(nextPosition.x) && obstacle.position.y === Math.trunc(nextPosition.y);
+    });
+  }
+
+  notifyCollision() {
+    this.collisionObservers.forEach(observer => {
+      console.log('COLISION');
+      observer.endGameEvent();
+    });
   }
 
 }
