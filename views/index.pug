@@ -1,14 +1,11 @@
-<html>
-  <head>
-    <title>Prueba</title>
-    <link rel="stylesheet" href="styles/style.css">
-  </head>
-  <body>
-    <div id="game-canvas" class="grid">
+doctype html
+html(lang="en")
+  head
+    title Prueba
+    link(rel="stylesheet" href="styles/style.css")
+  body
+    div(id="game-canvas" class="grid")
       for row, x in level1
         for item, y in row
           div(class=item id=item + '_' + x + '_' + y)
-    </div>
-    <script src="dist/bundle.js"></script>
-  </body>
-</html>
+    script(src="dist/bundle.js")

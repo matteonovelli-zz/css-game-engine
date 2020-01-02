@@ -65,7 +65,6 @@ class Player extends GameObject {
 
   notifyCollision () {
     this.collisionObservers.forEach((observer) => {
-      console.log('COLISION');
       observer.endGameEvent();
     });
   }

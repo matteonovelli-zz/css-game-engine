@@ -53,13 +53,11 @@ class Game {
       });
       this.update();
     } else {
-      console.log('REMOVE GAME CANVAS');
       document.getElementById('game-canvas').remove();
     }
   }
 
   endGameEvent () {
-    console.log('FIN');
     this.runGame = false;
   }
 }
