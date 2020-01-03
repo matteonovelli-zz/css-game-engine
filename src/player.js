@@ -14,7 +14,6 @@ class Player extends GameObject {
     this.direction = DIRECTION.RIGHT;
     this.speed = 3;
     this.obstacles = [];
-    this.collisionObservers = [];
 
     // const container = document.querySelector('#container');
     // swipeListenerMin(container);
@@ -66,9 +65,7 @@ class Player extends GameObject {
   }
 
   notifyCollision () {
-    this.collisionObservers.forEach((observer) => {
-      observer.collision();
-    });
+    dispatchEvent(new Event('playercollision'));
   }
 }
 

@@ -27,7 +27,6 @@ class Game {
       switch (gameObject.type) {
         case 'player':
           player = new Player(gameObject.elementId, gameObject.position.x, gameObject.position.y);
-          player.collisionObservers.push(this);
           break;
         case 'snakeBody':
           {
@@ -38,7 +37,12 @@ class Game {
       }
     });
     player.obstacles = [].concat(objects).concat(obstacles);
+
     this.gameObjects = [].concat(player).concat(objects).concat(obstacles);
+
+    addEventListener('playercollision', () => {
+      this.collision();
+    });
   }
 
   update () {

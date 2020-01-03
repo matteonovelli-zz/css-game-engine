@@ -121,18 +121,14 @@ test('If collide on next frame must emit end game event', () => {
   expect(sut.notifyCollision).toBeCalled();
 });
 
-test('Notify collision to all observers', () => {
+test('Notify collision by emitting playercollision event', () => {
   const sut = new Player('player');
-  const observer = { collision: jest.fn() };
-  sut.collisionObservers = [observer, observer];
 
-  sut.collisionObservers.forEach((observer) => {
-    expect(observer.collision).not.toBeCalled();
-  });
+  const observer = jest.fn();
+  addEventListener('playercollision', observer);
+  expect(observer).not.toBeCalled();
   sut.notifyCollision();
-  sut.collisionObservers.forEach((observer) => {
-    expect(observer.collision).toBeCalled();
-  });
+  expect(observer).toBeCalled();
 });
 
 test('When change position notify by emittin playerpositionchange event', () => {
