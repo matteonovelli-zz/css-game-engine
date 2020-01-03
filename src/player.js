@@ -1,3 +1,4 @@
+import swipeListenerMin from 'swipe-listener';
 import { GameObject } from './gameObject';
 import { DIRECTION } from './constants';
 
@@ -14,6 +15,12 @@ class Player extends GameObject {
     this.obstacles = [];
     this.collisionObservers = [];
     this.positionObservers = [];
+
+    const container = document.querySelector('#container');
+    swipeListenerMin(container);
+    container.addEventListener('swipe', (event) => {
+      console.log(event);
+    });
 
     document.onkeydown = (key) => this.processInputs(key);
   }

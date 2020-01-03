@@ -1,3 +1,4 @@
+const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 module.exports = {
   mode: 'development',
@@ -9,6 +10,11 @@ module.exports = {
     filename: 'bundle.js',
     chunkFilename: '[name].js'
   },
+  plugins: [
+    new CopyPlugin([
+      { from: 'node_modules/swipe-listener/dist/swipe-listener.min.js', to: 'swipe-listener.min.js' }
+    ])
+  ],
   module: {
     rules: [{
       test: /.jsx?$/,
