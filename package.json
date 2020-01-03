@@ -28,7 +28,6 @@
     "eslint-plugin-standard": "^4.0.1",
     "jest": "^24.9.0",
     "jsdom": "^15.2.1",
-    "phonegap": "^9.0.0",
     "webpack": "^4.29.0",
     "webpack-cli": "^3.2.1",
     "webpack-dev-server": "^3.1.14"
