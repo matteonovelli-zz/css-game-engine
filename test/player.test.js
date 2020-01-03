@@ -131,14 +131,15 @@ test('Notify collision by emitting playercollision event', () => {
   expect(observer).toBeCalled();
 });
 
-test('When change position notify by emittin playerpositionchange event', () => {
+test('When change position notify follower', () => {
   const sut = new Player('player', 4, 1);
   sut.speed = 1;
   sut.direction = DIRECTION.RIGHT;
+  sut.follower = { followeePositionChanged: jest.fn() };
 
-  const observer = jest.fn();
-  addEventListener('playerpositionchange', observer);
-  expect(observer).not.toBeCalled();
+  expect(sut.follower.followeePositionChanged).not.toBeCalled();
   sut.update(1000);
-  expect(observer).toBeCalled();
+  expect(sut.follower.followeePositionChanged).toBeCalledWith({ x: 4, y: 1 });
+  sut.update(1000);
+  expect(sut.follower.followeePositionChanged).toBeCalledWith({ x: 5, y: 1 });
 });

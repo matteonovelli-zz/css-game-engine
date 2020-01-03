@@ -36,6 +36,7 @@ class Game {
           break;
       }
     });
+    player.follower = objects[0];
     player.obstacles = [].concat(objects).concat(obstacles);
 
     this.gameObjects = [].concat(player).concat(objects).concat(obstacles);
