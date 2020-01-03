@@ -2,17 +2,18 @@ import { GameObject } from './gameObject';
 import { DIRECTION } from './constants';
 
 class Player extends GameObject {
-  constructor (elementId) {
+  constructor (elementId, x, y) {
     super(elementId);
-    this.init();
+    this.init(x, y);
   }
 
-  init () {
-    this.position = { x: 1, y: 1 };
+  init (x, y) {
+    this.position = { x, y };
     this.direction = DIRECTION.RIGHT;
     this.speed = 3;
     this.obstacles = [];
     this.collisionObservers = [];
+    this.positionObservers = [];
 
     document.onkeydown = (key) => this.processInputs(key);
   }
@@ -44,6 +45,9 @@ class Player extends GameObject {
     }
 
     if (!this.detectCollisions(nextPosition)) {
+      this.positionObservers.forEach((observer) => {
+        observer.playerPositionChanged(this.position, nextPosition);
+      });
       this.position = nextPosition;
     } else {
       this.notifyCollision();
@@ -65,7 +69,7 @@ class Player extends GameObject {
 
   notifyCollision () {
     this.collisionObservers.forEach((observer) => {
-      observer.endGameEvent();
+      observer.collision();
     });
   }
 }

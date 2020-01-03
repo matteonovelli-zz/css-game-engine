@@ -5,7 +5,9 @@ html(lang="en")
     link(rel="stylesheet" href="styles/style.css")
   body
     div(id="game-canvas" class="grid")
-      for row, x in level1
+      for row, x in level1.map
         for item, y in row
           div(class=item id=item + '_' + x + '_' + y)
+      for gameObject in level1.gameObjects
+        div(class=gameObject.class id=gameObject.elementId)
     script(src="dist/bundle.js")

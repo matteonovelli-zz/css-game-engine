@@ -13,24 +13,33 @@ class Game {
 
   init (levels) {
     const obstacles = [];
-    let player;
-    levels.level1.forEach((row, x) => {
+    const objects = [];
+    levels.level1.map.forEach((row, x) => {
       row.forEach((item, y) => {
-        switch (item) {
-          case 'w':
-            obstacles.push(new Obstacle(`${item}_${x}_${y}`, x, y));
-            break;
-          case 'p':
-            player = new Player(`${item}_${x}_${y}`);
-            player.collisionObservers.push(this);
-            break;
-          default:
-            break;
+        if (item === 'w') {
+          obstacles.push(new Obstacle(`${item}_${x}_${y}`, x, y));
         }
       });
     });
-    player.obstacles = obstacles;
-    this.gameObjects = [].concat(player).concat(obstacles);
+    levels.level1.gameObjects.forEach((gameObject) => {
+      switch (gameObject.type) {
+        case 'player':
+          {
+            const player = new Player(gameObject.elementId, gameObject.position.x, gameObject.position.y);
+            player.collisionObservers.push(this);
+            player.obstacles = obstacles;
+            objects.push(player);
+          }
+          break;
+        case 'snakeBody':
+          {
+            const bodyPart = new Player(gameObject.elementId, gameObject.position.x, gameObject.position.y);
+            objects.push(bodyPart);
+          }
+          break;
+      }
+    });
+    this.gameObjects = [].concat(objects).concat(obstacles);
   }
 
   update () {
@@ -57,7 +66,7 @@ class Game {
     }
   }
 
-  endGameEvent () {
+  collision () {
     this.runGame = false;
   }
 }
