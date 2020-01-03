@@ -135,18 +135,14 @@ test('Notify collision to all observers', () => {
   });
 });
 
-test('Notify position to all observers', () => {
+test('When change position notify by emittin playerpositionchange event', () => {
   const sut = new Player('player', 4, 1);
-  const observer = { playerPositionChanged: jest.fn() };
   sut.speed = 1;
   sut.direction = DIRECTION.RIGHT;
-  sut.positionObservers = [observer, observer];
 
-  sut.positionObservers.forEach((observer) => {
-    expect(observer.playerPositionChanged).not.toBeCalled();
-  });
+  const observer = jest.fn();
+  addEventListener('playerpositionchange', observer);
+  expect(observer).not.toBeCalled();
   sut.update(1000);
-  sut.positionObservers.forEach((observer) => {
-    expect(observer.playerPositionChanged).toBeCalledWith({ x: 4, y: 1 }, { x: 5, y: 1 });
-  });
+  expect(observer).toBeCalled();
 });

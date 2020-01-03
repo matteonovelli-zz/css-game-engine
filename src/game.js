@@ -1,4 +1,5 @@
 import { Player } from './player';
+import { SnakeBody } from './snakeBody';
 import { Obstacle } from './obstacle';
 
 class Game {
@@ -21,25 +22,23 @@ class Game {
         }
       });
     });
+    let player;
     levels.level1.gameObjects.forEach((gameObject) => {
       switch (gameObject.type) {
         case 'player':
-          {
-            const player = new Player(gameObject.elementId, gameObject.position.x, gameObject.position.y);
-            player.collisionObservers.push(this);
-            player.obstacles = obstacles;
-            objects.push(player);
-          }
+          player = new Player(gameObject.elementId, gameObject.position.x, gameObject.position.y);
+          player.collisionObservers.push(this);
           break;
         case 'snakeBody':
           {
-            const bodyPart = new Player(gameObject.elementId, gameObject.position.x, gameObject.position.y);
+            const bodyPart = new SnakeBody(gameObject.elementId, gameObject.position.x, gameObject.position.y);
             objects.push(bodyPart);
           }
           break;
       }
     });
-    this.gameObjects = [].concat(objects).concat(obstacles);
+    player.obstacles = [].concat(objects).concat(obstacles);
+    this.gameObjects = [].concat(player).concat(objects).concat(obstacles);
   }
 
   update () {

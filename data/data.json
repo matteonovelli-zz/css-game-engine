@@ -17,16 +17,28 @@
         "elementId": "player",
         "class": "p",
         "type": "player",
-        "position": { "x": 3, "y": 1 }
+        "position": { "x": 5, "y": 1 }
       },
       {
         "elementId": "body_0",
         "class": "p",
         "type": "snakeBody",
-        "position": { "x": 2, "y": 1 }
+        "position": { "x": 4, "y": 1 }
       },
       {
         "elementId": "body_1",
+        "class": "p",
+        "type": "snakeBody",
+        "position": { "x": 3, "y": 1 }
+      },
+      {
+        "elementId": "body_2",
+        "class": "p",
+        "type": "snakeBody",
+        "position": { "x": 2, "y": 1 }
+      },
+      {
+        "elementId": "body_3",
         "class": "p",
         "type": "snakeBody",
         "position": { "x": 1, "y": 1 }

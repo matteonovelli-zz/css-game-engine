@@ -4,12 +4,11 @@ html(lang="en")
     title Prueba
     link(rel="stylesheet" href="styles/style.css")
   body
-    div(id="container") algo de contenido
-      div(id="game-canvas" class="grid")
-        for row, x in level1.map
-          for item, y in row
-            div(class=item id=item + '_' + x + '_' + y)
-        for gameObject in level1.gameObjects
-          div(class=gameObject.class id=gameObject.elementId)
+    div(id="game-canvas" class="grid")
+      for row, x in level1.map
+        for item, y in row
+          div(class=item id=item + '_' + x + '_' + y)
+      for gameObject in level1.gameObjects
+        div(class=gameObject.class id=gameObject.elementId)
     script(src="dist/swipe-listener.min.js")
     script(src="dist/bundle.js")
